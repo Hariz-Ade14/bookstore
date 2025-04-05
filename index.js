@@ -4,8 +4,10 @@ import cors from "cors";
 import { connectDB } from "./database/connectDB.js";
 import router from "./routes/auth.routes.js";
 import bookRouter from "./routes/book.routes.js";
+import job from "./utils/cron.js";
 
 dotenv.config();
+job.start(); // Start the cron job
 
 const app = express();
 const PORT = process.env.PORT || 5000;
