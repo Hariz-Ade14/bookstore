@@ -10,6 +10,10 @@ const booksSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        description: {
+            type: String,
+            required: true,
+        },
         image: {
             type: String,
             required: true,
@@ -23,7 +27,7 @@ const booksSchema = new mongoose.Schema(
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required: true,
+            required: false,
         },
     },
     { timestamps: true }

@@ -1,13 +1,13 @@
 import express from "express";
-import { getBooks,postBooks ,deleteBooks,getBooksPostedByUser} from "../controller/book.controller.js";
+import { getBooks,postBooks ,deleteBooks,getBooksPostedByUser,getBooksbyId} from "../controller/book.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
 const bookRouter = express.Router();
 
+bookRouter.post('/addbook', postBooks);
+bookRouter.get('/allbooks', getBooks);
+bookRouter.get('/:id', getBooksbyId);
+bookRouter.delete('/:id', deleteBooks);
+bookRouter.get('/', getBooksPostedByUser);
 
-bookRouter.post('/',verifyToken, postBooks);
-bookRouter.get('/',verifyToken, getBooks);
-bookRouter.delete('/:id',verifyToken, deleteBooks);
-bookRouter.get('/',verifyToken, getBooksPostedByUser);
-
-export default bookRouter
+export default bookRouter;

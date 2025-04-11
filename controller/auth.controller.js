@@ -10,7 +10,6 @@ export const signup = async (req, res) => {
     }
 
     const userAlreadyExists = await User.findOne({ email });
-    console.log("userAlreadyExists", userAlreadyExists);
 
     if (userAlreadyExists) {
       return res
@@ -65,13 +64,14 @@ export const login = async (req, res) => {
         .json({ success: false, message: "Invalid credentials" });
     }
 
-    generateTokenAndSetCookie(res, user._id);
+    const token = generateTokenAndSetCookie(res, user._id);
 
     user.lastLogin = new Date();
     await user.save();
 
     res.status(200).json({
       success: true,
+      token,
       message: "Logged in successfully",
       user: {
         ...user._doc,

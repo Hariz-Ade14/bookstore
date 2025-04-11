@@ -3,25 +3,27 @@ import { Books } from "../model/books.model.js";
 
 const postBooks = async (req, res) => {
   try {
-    const { title, caption, image, rating } = req.body;
+    const { title,rating, caption,description, image } = req.body;
     !image ||
       !title ||
       !caption ||
+      !description ||
       (!rating &&
         res
           .status(400)
           .json({ success: false, message: "Provide all fields" }));
 
     //upload image to cloudinary
-    const uploadResponse = await cloudinary.uploader.upload(image);
-    const imageURL = uploadResponse.secure_url;
+    // const uploadResponse = await cloudinary.uploader.upload(image);
+    // const imageURL = uploadResponse.secure_url;
 
     const newBook = new Books({
       title,
       caption,
-      image: imageURL,
+      image,
       rating,
-      user: req.user._id,
+      description
+      // user: req.user._id,
     });
 
     await newBook.save();
@@ -78,6 +80,24 @@ const getBooksPostedByUser =   async (req, res) => {
   }
 };
 
+const getBooksbyId = async (req,res) => {
+      const id  = req.params.id;
+      try {
+        const book = await Books.findById(id);
+        if (!book) {
+          return res.status(404).json({ success: false, message: "Book not found" });
+        }
+        res.json({
+             success: true,
+             book: book
+        });
+      } catch (error) {
+        console.log("Error in getBooksbyId ", error);
+        res.status(500).json({ success: false, error: "Error in getBooksbyId", message: error.message });
+      }
+      
+}
+
 const deleteBooks = async (req, res) => {
   try {
     const { id } = req.params;
@@ -110,4 +130,4 @@ const deleteBooks = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-export { postBooks, getBooks, deleteBooks, getBooksPostedByUser };
+export { postBooks, getBooks, deleteBooks, getBooksPostedByUser,getBooksbyId };
